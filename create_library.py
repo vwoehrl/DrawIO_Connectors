@@ -112,7 +112,7 @@ with open(file_path, 'r') as file:
 
 output += file_content[12:]
 
-filestringLib = "Connectors.drawio"
+filestringLib = "ArchitectureBlocks_and_Connectors.drawio"
 text_file = open(filestringLib, "w")
 text_file.write(output)
 text_file.close()
