@@ -8,7 +8,7 @@
             "name": "Python Debugger: Current File",
             "type": "debugpy",
             "request": "launch",
-            "program": "run_test.py",
+            "program": "create_library.py",
             "console": "integratedTerminal"
         }
     ]

@@ -1,6 +1,9 @@
 import sys
 import zlib
 import base64
+import os, os.path, sys
+import glob
+from xml.etree import ElementTree
 
 def decode_base64_and_inflate( b64string ):
     decoded_data = base64.b64decode( b64string )
@@ -97,13 +100,21 @@ for nnn in range(1, 60):
     # text_file.close()
 
 
-# WRITE LIBRARY
-output = output[:-1]
-output += f'''
-]</mxlibrary>'''
-# print(output)
+# WRITE LIBRARY without Archblocks
+# output = output[:-1]
+# output += f'''
+# ]</mxlibrary>'''
+
+# ADD ARCHBLOCKS
+file_path = 'Architecture.drawio'
+with open(file_path, 'r') as file:
+    file_content = file.read()
+
+output += file_content[12:]
 
 filestringLib = "Connectors.drawio"
 text_file = open(filestringLib, "w")
 text_file.write(output)
 text_file.close()
+
+
