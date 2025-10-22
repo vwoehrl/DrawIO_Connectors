@@ -16,7 +16,7 @@ def deflate_and_base64_encode( string_val ):
 
 output = f'''<mxlibrary>['''
 
-for nnn in range(1, 60):
+for nnn in range(1, 100):
     factor = 2
     nCons = nnn
     shapeH= (nCons+1)* factor * 10
@@ -92,6 +92,58 @@ for nnn in range(1, 60):
         "w": {shapeW},
         "h": {shapeH}
     }},'''
+
+#DOUBLE ROW
+doublerow_pincount = [20, 60, 120]
+for nnn in doublerow_pincount:
+    factor = 2
+    nRows = 2
+    nCons = nnn
+    shapeH= (nCons/nRows+1)* factor * 10
+    shapeW= 40 * factor
+
+    #NORMAL
+    fullstring = "<shape h=\"" + str(shapeH) + "\" w=\"" + str(shapeW) + "\" aspect=\"fixed\" strokewidth=\"inherit\">\n"
+    fullstring += "  <connections>\n"
+    for x in range (1,nCons+1):
+        if x % 2 == 1:
+            fullstring += "    <constraint x=\"0\" y=\"" + str(round((x/2+0.5) * (1/(nCons/nRows+1)),4)) + "\" perimeter=\"0\" />\n"
+        else:
+            fullstring += "    <constraint x=\"1\" y=\"" + str(round((x/2) * (1/(nCons/nRows+1)),4)) + "\" perimeter=\"0\" />\n"
+    fullstring += "  </connections>\n"
+    fullstring += "  <background>\n"
+    fullstring += "    <rect x=\"0\" y=\"0\" h=\"" + str(shapeH) + "\" w=\"" + str(shapeW) + "\" />\n"
+    fullstring += "  </background>\n"
+    fullstring += "  <foreground>\n"
+    fullstring += "    <fillstroke />\n"
+    for x in range (1,nCons+1):
+        fullstring += "    <path>\n"
+        if x % 2 == 1:
+            fullstring += "      <move x=\"0\" y=\"" + str(x*10*factor/nRows+10*(factor-1)) + "\" />\n"
+            fullstring += "      <line x=\"-10\" y=\"" + str(x*10*factor/nRows+10*(factor-1)) + "\" />\n"
+        else:
+            fullstring += "      <move x=\"80\" y=\"" + str((x-1)*10*factor/nRows+10*(factor-1)) + "\" />\n"
+            fullstring += "      <line x=\"90\" y=\"" + str((x-1)*10*factor/nRows+10*(factor-1)) + "\" />\n"            
+        fullstring += "    </path>\n"
+        fullstring += "    <stroke />\n"
+        if x % 2 == 1:
+            fullstring += "    <text str=\"" + str(x) + "\" x=\"10\" y=\"" + str(x*10*factor/nRows+10*(factor-1)) + "\" align = \"center\" valign=\"middle\" align-shape=\"0\"/>"
+        else:
+            fullstring += "    <text str=\"" + str(x) + "\" x=\"70\" y=\"" + str((x-1)*10*factor/nRows+10*(factor-1)) + "\" align = \"center\" valign=\"middle\" align-shape=\"0\"/>"
+        fullstring += "    <stroke />"
+    fullstring += "  </foreground>\n"
+    fullstring += "</shape>\n"
+    #print(fullstring)
+
+    encodedstring = deflate_and_base64_encode(fullstring.encode('utf-8'))
+    shape_stencil = encodedstring.decode("utf-8")
+    output += f'''
+    {{
+        "xml": "&lt;mxGraphModel&gt;&lt;root&gt;&lt;mxCell id=\\"0\\"/&gt;&lt;mxCell id=\\"1\\" parent=\\"0\\"/&gt;&lt;mxCell id=\\"2\\" value=\\"\\" style=\\"shape=stencil({shape_stencil});whiteSpace=wrap;html=1;\\" vertex=\\"1\\" parent=\\"1\\"&gt;&lt;mxGeometry width=\\"{shapeW}\\" height=\\"{shapeH}\\" as=\\"geometry\\"/&gt;&lt;/mxCell&gt;&lt;/root&gt;&lt;/mxGraphModel&gt;",
+        "w": {shapeW},
+        "h": {shapeH}
+    }},'''
+
 
     # Generate Shape XML Reverse
     # filestring = str(nCons) + "P_CON_Reverse.xml"
